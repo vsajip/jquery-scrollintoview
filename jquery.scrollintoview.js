@@ -117,18 +117,18 @@
 					right: dim.s.rect.right - dim.s.border.right - dim.s.scrollbar.right - dim.e.rect.right
 				};
 
-				var animOptions = {};
+				var animProperties = {};
 
 				// vertical scroll
 				if (options.direction.y === true)
 				{
 					if (rel.top < 0)
 					{
-						animOptions.scrollTop = Math.max(0, dim.s.scroll.top + rel.top - options.viewPadding.y);
+						animProperties.scrollTop = Math.max(0, dim.s.scroll.top + rel.top - options.viewPadding.y);
 					}
 					else if (rel.top > 0 && rel.bottom < 0)
 					{
-						animOptions.scrollTop = Math.min(dim.s.scroll.top + Math.min(rel.top, -rel.bottom) + options.viewPadding.y, dim.s.scroll.maxtop);
+						animProperties.scrollTop = Math.min(dim.s.scroll.top + Math.min(rel.top, -rel.bottom) + options.viewPadding.y, dim.s.scroll.maxtop);
 					}
 				}
 
@@ -137,29 +137,49 @@
 				{
 					if (rel.left < 0)
 					{
-						animOptions.scrollLeft = Math.max(0, dim.s.scroll.left + rel.left - options.viewPadding.x);
+						animProperties.scrollLeft = Math.max(0, dim.s.scroll.left + rel.left - options.viewPadding.x);
 					}
 					else if (rel.left > 0 && rel.right < 0)
 					{
-						animOptions.scrollLeft = Math.min(dim.s.scroll.left + Math.min(rel.left, -rel.right) +  options.viewPadding.x, dim.s.scroll.maxleft);
+						animProperties.scrollLeft = Math.min(dim.s.scroll.left + Math.min(rel.left, -rel.right) +  options.viewPadding.x, dim.s.scroll.maxleft);
 					}
 				}
 
 				// scroll if needed
-				if (!$.isEmptyObject(animOptions))
+				if (!$.isEmptyObject(animProperties))
 				{
-					if (rootrx.test(scroller[0].nodeName))
-					{
+					var scrollExpect = {},
+						scrollListener = scroller;
+
+					if (rootrx.test(scroller[0].nodeName)) {
 						scroller = $("html,body");
+						scrollListener = $(window);
 					}
+
+					function animateStep(now, tween) {
+						scrollExpect[tween.prop] = Math.floor(now);
+					};
+					function onscroll(event) {
+						$.each(scrollExpect, function(key, value) {
+							if (scrollListener[key]() != value) {
+								options.complete = null;	// don't run complete function if the scrolling was interrupted
+								scroller.stop('scrollintoview');
+							}
+						});
+					}
+					scrollListener.on('scroll', onscroll);
+
 					scroller
-						.stop()
-						.animate(animOptions, options.duration)
+						.stop('scrollintoview')
+						.animate(animProperties, { duration: options.duration, step: animateStep, queue: 'scrollintoview' })
 						.eq(0) // we want function to be called just once (ref. "html,body")
-						.queue(function (next) {
+						.queue('scrollintoview', function (next) {
+							scrollListener.off('scroll', onscroll);
 							$.isFunction(options.complete) && options.complete.call(scroller[0]);
 							next();
-						});
+						})
+
+					scroller.dequeue('scrollintoview');
 				}
 				else
 				{
