@@ -160,7 +160,7 @@
 
                     function onscroll(event) {
                         $.each(scrollExpect, function(key, value) {
-                            if (scrollListener[key]() != value) {
+                            if (Math.floor(scrollListener[key]()) != Math.floor(value)) {
                                 options.complete = null; // don't run complete function if the scrolling was interrupted
                                 scroller.stop('scrollintoview');
                             }
