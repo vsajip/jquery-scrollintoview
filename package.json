@@ -1,8 +1,11 @@
 {
   "name": "jquery.scrollintoview",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "jQuery scrollintoview() plugin and :scrollable selector filter",
   "main": "jquery.scrollintoview.js",
+  "dependencies": {
+    "jquery": ">=1.4"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adamtal3/jquery-scrollintoview.git"

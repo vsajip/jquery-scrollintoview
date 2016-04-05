@@ -5,6 +5,9 @@
   "authors": [
     "Robert Koritnik"
   ],
+  "dependencies": {
+    "jquery": ">=1.4"
+  },
   "license": "MIT",
   "keywords": [
     "jquery",
