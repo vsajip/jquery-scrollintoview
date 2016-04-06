@@ -1,7 +1,7 @@
 /*!
  * jQuery scrollintoview() plugin and :scrollable selector filter
  *
- * Version 1.9.3 (05 April 2016)
+ * Version 1.9.4 (06 April 2016)
  * Requires jQuery 1.4 or newer
  *
  * Copyright (c) 2011 Robert Koritnik
@@ -184,10 +184,6 @@
                     // when there's nothing to scroll, just call the "complete" function
                     $.isFunction(options.complete) && options.complete.call(scroller[0]);
                 }
-            }
-            else {
-                // when there's no scrollable parent, just call the "complete" function
-                $.isFunction(options.complete) && options.complete.call(scroller[0]);
             }
 
             // return set back
