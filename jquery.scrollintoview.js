@@ -30,7 +30,8 @@
     var settings = {
         duration: "fast",
         direction: "both",
-        viewPadding: 0
+        viewPadding: 0,
+        padding: {L:0, R:0, T:0, B:0}
     };
 
     var rootrx = /^(?:html)$/i;
@@ -118,10 +119,10 @@
                 };
 
                 var rel = {
-                    top: dim.e.rect.top - (dim.s.rect.top + dim.s.border.top),
-                    bottom: dim.s.rect.bottom - dim.s.border.bottom - dim.s.scrollbar.bottom - dim.e.rect.bottom,
-                    left: dim.e.rect.left - (dim.s.rect.left + dim.s.border.left),
-                    right: dim.s.rect.right - dim.s.border.right - dim.s.scrollbar.right - dim.e.rect.right
+                    top: dim.e.rect.top - (dim.s.rect.top + dim.s.border.top) - options.padding.T,
+                    bottom: dim.s.rect.bottom - dim.s.border.bottom - dim.s.scrollbar.bottom - dim.e.rect.bottom - options.padding.B,
+                    left: dim.e.rect.left - (dim.s.rect.left + dim.s.border.left) - options.padding.L,
+                    right: dim.s.rect.right - dim.s.border.right - dim.s.scrollbar.right - dim.e.rect.right - options.padding.R
                 };
 
                 var animProperties = {};
